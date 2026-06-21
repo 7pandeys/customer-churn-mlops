@@ -48,3 +48,10 @@ score = pipeline.score(
 )
 
 print(score)
+
+import joblib
+
+joblib.dump(
+    pipeline,
+    "models/churn_pipeline.pkl"
+)
