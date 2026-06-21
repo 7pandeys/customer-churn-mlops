@@ -1,0 +1,21 @@
+[project]
+name = "customer-churn-mlops"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Sandy", email = "7pandeys@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "pandas (>=3.0.3,<4.0.0)",
+    "scikit-learn (>=1.9.0,<2.0.0)",
+    "joblib (>=1.5.3,<2.0.0)"
+]
+
+[tool.poetry]
+packages = [{include = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
