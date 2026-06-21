@@ -3,12 +3,18 @@ from src.preprocess import split_data
 from src.train import train_model
 from src.evaluate import evaluate
 
+import joblib
+
 df = load_data(
     "data/churn.csv"
 )
 
 X_train, X_test, y_train, y_test = split_data(
     df
+)
+
+features = joblib.load(
+    "models/features.pkl"
 )
 
 model = train_model(
