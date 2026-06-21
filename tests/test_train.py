@@ -4,6 +4,7 @@ from src.train import train_model
 from src.evaluate import evaluate
 
 import mlflow
+import mlflow.sklearn
 
 df = load_data(
     "data/churn.csv"
@@ -28,6 +29,11 @@ with mlflow.start_run():
         model,
         X_test,
         y_test
+    )
+
+    mlflow.sklearn.log_model(
+        sk_model=model,
+        name="model"
     )
 
     mlflow.log_param(
@@ -59,3 +65,4 @@ with mlflow.start_run():
     )
 
     print(score)
+
