@@ -24,3 +24,12 @@ def load_features():
     return joblib.load(
         "models/features.pkl"
     )
+
+import joblib
+
+
+def load_pipeline():
+
+    return joblib.load(
+        "models/churn_pipeline.pkl"
+    )

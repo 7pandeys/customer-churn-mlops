@@ -3,7 +3,9 @@ from pydantic import BaseModel, Field
 from src.ingest import load_data
 from src.preprocess import split_data
 from src.predict import load_model
+from src.predict import load_pipeline
 
+pipeline = load_pipeline()
 df = load_data(
     "data/churn.csv"
 )
@@ -14,17 +16,36 @@ X_train, X_test, y_train, y_test = split_data(
 
 model = load_model()
 
+from pydantic import BaseModel
+
+
 class Customer(BaseModel):
 
-    tenure: float = Field(example=10)
+    gender: str
+    SeniorCitizen: int
+    Partner: str
+    Dependents: str
+    tenure: int
 
-    MonthlyCharges: float = Field(
-        example=50
-    )
+    PhoneService: str
+    MultipleLines: str
 
-    TotalCharges: float = Field(
-        example=500
-    )
+    InternetService: str
+
+    OnlineSecurity: str
+    OnlineBackup: str
+    DeviceProtection: str
+    TechSupport: str
+
+    StreamingTV: str
+    StreamingMovies: str
+
+    Contract: str
+    PaperlessBilling: str
+    PaymentMethod: str
+
+    MonthlyCharges: float
+    TotalCharges: float
 
 app = FastAPI()
 
@@ -41,13 +62,23 @@ def health():
     }
 
 
+import pandas as pd
+
+
 @app.post("/predict")
-def predict_churn(
-    customer: Customer
-):
+def predict(customer: Customer):
+
+    df = pd.DataFrame(
+        [customer.model_dump()]
+    )
+
+    prediction = pipeline.predict(
+        df
+    )
 
     return {
-        "received": customer.model_dump()
+        "prediction":
+        int(prediction[0])
     }
 
 @app.get("/predict-test")
