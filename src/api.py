@@ -4,7 +4,9 @@ from src.ingest import load_data
 from src.preprocess import split_data
 from src.predict import load_model
 from src.predict import load_pipeline
+import time
 
+request_count = 0
 pipeline = load_pipeline()
 df = load_data(
     "data/churn.csv"
@@ -67,18 +69,34 @@ import pandas as pd
 
 @app.post("/predict")
 def predict(customer: Customer):
+    global request_count
+
+    request_count += 1
 
     df = pd.DataFrame(
         [customer.model_dump()]
     )
 
+    start_time = time.time()
+
     prediction = pipeline.predict(
         df
     )
 
+    latency_ms = (
+                         time.time() - start_time
+                 ) * 1000
+
     return {
-        "prediction":
-        int(prediction[0])
+        "prediction": int(
+            prediction[0]
+        ),
+        "latency_ms": round(
+            latency_ms,
+            2
+        ),
+        "request_count":
+            request_count
     }
 
 @app.get("/predict-test")
@@ -93,4 +111,12 @@ def predict_test():
     return {
         "prediction":
         int(prediction[0])
+    }
+
+@app.get("/metrics")
+def metrics():
+
+    return {
+        "requests":
+        request_count
     }
