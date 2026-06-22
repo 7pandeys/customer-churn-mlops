@@ -1,3 +1,11 @@
+import sys
+from pathlib import Path
+
+sys.path.append(
+    str(
+        Path(__file__).resolve().parent.parent
+    )
+)
 from src.ingest import load_data
 from src.preprocess import split_data
 from src.train import train_model
